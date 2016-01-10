@@ -24,12 +24,14 @@ var gulp = require('gulp'),
 
 
 
+
+// CONFIGURATIONS
+// ===============================================
 var siteUrl = 'http://www.google.com';
 var tracking = {
     ga: {
-        testAccountId: '', // UA-1234
-        prodAccountId: '', // UA-1235
-        accountId: '' // don't fill this one
+        testAccountId: '', // like UA-1234
+        prodAccountId: '' // like UA-1235
     }
 };
 var srcPath = 'src/';
@@ -40,10 +42,60 @@ var bootstrapJsPath = './bower_components/bootstrap-sass/assets/javascripts/boot
 var fontPaths = [
     './bower_components/components-font-awesome/fonts/*.*'
 ];
+// ===============================================
 
 
 
 
+// CDN CACHE CONFIGURATIONS
+// ===============================================
+
+// files that shouldn't be cached
+var noCacheFiles = [
+    distPath + '**/*.html',
+    distPath + '**/*.xml',
+    distPath + '**/*.txt'
+];
+var noCacheOptions = {
+    gzippedOnly: true,
+    headers: { 'Cache-Control': 'max-age=0, no-transform, public' } // don't cache
+};
+
+
+// files that should be cached for a short period of time
+var shortCacheFiles = [
+    distPath + '**/*.jpg',
+    distPath + '**/*.png',
+    distPath + '**/*.ico'
+];
+var shortCacheOptions = {
+    gzippedOnly: true,
+    headers: { 'Cache-Control': 'max-age=86400, no-transform, public' } // cache for 1 day
+};
+
+
+// files that should be cached for a long period of time
+var longCacheFiles = [
+    distPath + '**/*.css',
+    distPath + '**/*.eot',
+    distPath + '**/*.svg',
+    distPath + '**/*.ttf',
+    distPath + '**/*.woff',
+    distPath + '**/*.woff2',
+    distPath + '**/*.otf',
+    distPath + '**/*.js'
+];
+var longCacheOptions = {
+    gzippedOnly: true,
+    headers: { 'Cache-Control': 'max-age=604800, no-transform, public' } // cache for 7 days
+};
+
+// ===============================================
+
+
+
+
+// needed to set dynamic file names
 var fileNames = {
     css: {},
     js: {}
@@ -113,6 +165,7 @@ gulp.task('templates', ['clean', 'javascript', 'css'], function () {
 
     // use prod ga account for prod
     if (argv.prod) YOUR_LOCALS.tracking.ga.accountId = tracking.ga.prodAccountId;
+    else YOUR_LOCALS.tracking.ga.accountId = tracking.ga.testAccountId;
 
     return gulp.src([srcPath + 'templates/**/*.jade', '!' + srcPath + 'templates/layouts/**/*.jade'])
         .pipe(jade({
@@ -159,75 +212,23 @@ gulp.task('images', ['clean'], function () {
 
 
 
-//gulp.task('s3', ['clean', 'templates', 'copy', 'images', 'sitemap'], function () {
-//    var aws = require('./aws.json');
+gulp.task('s3', ['clean', 'templates', 'copy', 'images', 'sitemap'], function () {
+    var aws = require('./aws.json');
 
-//    // css
-//    // fonts
-//    // javascript
-//    var longCacheFiles = [
-//        distPath + '**/*.css',
-//        distPath + '**/*.eot',
-//        distPath + '**/*.svg',
-//        distPath + '**/*.ttf',
-//        distPath + '**/*.woff',
-//        distPath + '**/*.woff2',
-//        distPath + '**/*.otf',
-//        distPath + '**/*.js'
-//    ];
-//    var longCacheOptions = {
-//        gzippedOnly: true,
-//        headers: { 'Cache-Control': 'max-age=604800, no-transform, public' } // 7 days
-//    };
-//    var longCache = gulp.src(longCacheFiles)
-//        .pipe(gzip())
-//        .pipe(s3(aws, longCacheOptions));
+    var longCache = gulp.src(longCacheFiles)
+        .pipe(gzip())
+        .pipe(s3(aws, longCacheOptions));
 
+    var shortCache = gulp.src(shortCacheFiles)
+        .pipe(gzip())
+        .pipe(s3(aws, shortCacheOptions));
 
-//    // images
-//    // .ico
-//    var shortCacheFiles = [
-//        distPath + '**/*.jpg',
-//        distPath + '**/*.png',
-//        distPath + '**/*.ico'
-//    ];
-//    var shortCacheOptions = {
-//        gzippedOnly: true,
-//        headers: { 'Cache-Control': 'max-age=86400, no-transform, public' } // 1 day
-//    };
-//    var shortCache = gulp.src(shortCacheFiles)
-//        .pipe(gzip())
-//        .pipe(s3(aws, shortCacheOptions));
+    var noCache = gulp.src(noCacheFiles)
+        .pipe(gzip())
+        .pipe(s3(aws, noCacheOptions));
 
-
-//    // not cached
-//    // .html, .xml, .txt
-//    var noCacheFiles = [
-//        distPath + '**/*.html',
-//        distPath + '**/*.xml',
-//        distPath + '**/*.txt'
-//    ];
-//    var noCacheOptions = {
-//        gzippedOnly: true,
-//        headers: { 'Cache-Control': 'max-age=0, no-transform, public' } // none
-//    };
-//    var noCache = gulp.src(noCacheFiles)
-//        .pipe(gzip())
-//        .pipe(s3(aws, noCacheOptions));
-
-
-//    return merge(longCache, shortCache, noCache);
-
-//    /*var options = {
-//        gzippedOnly: true,
-//        headers: {'Cache-Control': 'max-age=3600, no-transform, public'} // 21600 = 6 hours
-//    };
-
-//    return gulp.src(distPath + '**')
-//        .pipe(gzip())
-//        .pipe(s3(aws, options));*/
-//});
-
+    return merge(longCache, shortCache, noCache);
+});
 
 
 

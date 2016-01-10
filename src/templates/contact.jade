@@ -1,0 +1,26 @@
+﻿extends ./layouts/main
+
+block title
+    title Clean Blog - Contact
+block metaDescription
+    meta(name='description', content="")
+
+block content
+
+    <!-- Page Header -->
+    <!-- Set your background image for this header on the line below. -->
+    header.intro-header(style='background-image: url("img/contact-bg.jpg")')
+        div.container
+            div.row
+                div.col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1
+                    div.site-heading
+                        h1 Contact Me
+                        hr.small
+                        span.subheading Have questions? I have answers (maybe).
+
+
+    <!-- Main Content -->
+    div.container
+        div.row
+            div.col-lg-8.col-lg-offset-2.col-md-10.col-md-offset-1.text-center
+                p Send me an #[a(href='mailto:myemail@test.com') email]
