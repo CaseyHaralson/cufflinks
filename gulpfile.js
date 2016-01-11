@@ -237,9 +237,9 @@ gulp.task('build', ['clean', 'templates', 'copy', 'images', 'sitemap'], function
 
 });
 gulp.task('watch', ['build'], function () {
-    gulp.watch(srcPath + 'templates/**/*.jade', ['build']);
-    gulp.watch(srcPath + 'css/**/*.scss', ['build']);
-    gulp.watch(srcPath + 'js/**/*.js', ['build']);
+    gulp.watch(srcPath + 'templates/**/*.*', ['build']);
+    gulp.watch(srcPath + 'css/**/*.*', ['build']);
+    gulp.watch(srcPath + 'js/**/*.*', ['build']);
 });
 gulp.task('default', ['watch'], function () {
 
