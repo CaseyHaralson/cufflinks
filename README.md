@@ -10,19 +10,19 @@ It's currently setup to:
 * tracking - use one google analytics account for testing and one for production (tracking is off by default)
 
 This project also comes preconfigured with:
-* html5boilerplate
-* jQuery
-* modernizr
-* bootstrap
-* fontawesome
-* google analytics
-* clean blog bootstrap theme from Start Bootstrap
+* [HTML5 Boilerplate](https://html5boilerplate.com/)
+* [jQuery](https://jquery.com/)
+* [Modernizr](https://modernizr.com/)
+* [Bootstrap](http://getbootstrap.com/)
+* [Font Awesome](https://fortawesome.github.io/Font-Awesome/)
+* [Google Analytics](https://www.google.com/analytics/)
+* [Clean Blog Bootstrap theme from Start Bootstrap](http://startbootstrap.com/template-overviews/clean-blog/)
 
 
 ## Getting Started
 
 There are a couple of ways to download CuffLinks:
-* [Download the zip](http://www.google.com)
+* [Download the zip](https://github.com/CaseyHaralson/cufflinks/archive/master.zip)
 * Clone the repo: `git clone https://github.com/caseyharalson/cufflinks.git`
 
 
