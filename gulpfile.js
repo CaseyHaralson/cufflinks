@@ -27,7 +27,7 @@ var gulp = require('gulp'),
 
 // CONFIGURATIONS
 // ===============================================
-var siteUrl = 'http://www.google.com';
+var siteUrl = 'http://www.google.com'; //used when making the sitemap
 var tracking = {
     ga: {
         testAccountId: '', // like UA-1234
@@ -70,7 +70,7 @@ var shortCacheFiles = [
 ];
 var shortCacheOptions = {
     gzippedOnly: true,
-    headers: { 'Cache-Control': 'max-age=86400, no-transform, public' } // cache for 1 day
+    headers: { 'Cache-Control': 'max-age=86400, no-transform, public' } // cache for 1 day currently
 };
 
 
@@ -87,7 +87,7 @@ var longCacheFiles = [
 ];
 var longCacheOptions = {
     gzippedOnly: true,
-    headers: { 'Cache-Control': 'max-age=604800, no-transform, public' } // cache for 7 days
+    headers: { 'Cache-Control': 'max-age=604800, no-transform, public' } // cache for 7 days currently
 };
 
 // ===============================================
