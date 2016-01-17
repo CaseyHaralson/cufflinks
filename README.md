@@ -77,6 +77,9 @@ Because we create a file with a unique name, we need a way to pass that to our h
 The "fileNames" variable is here for that reason.
 In the "inspect" process, the fileNames.css.main variable property is being updated with the new name.
 
+If the gulp process is started with a "--prod" argument like `gulp --prod`, the css files will be sent through "cssnano" and the output will be minified.
+This is done through the "gulpif" process.
+
 ### javascript task
 
 Javascript output files can be created here.
@@ -114,6 +117,9 @@ The siteUrl in the "CONFIGURATIONS" section will need to be updated appropriatel
 This task cleans the distribution folder of any previous files.
 All the other tasks probably wait for this task to complete before running.
 
+This task will only clean the distribution folder if the gulp process is started with the "--prod" argument like `gulp --prod`.
+This helps to make things faster during development.
+
 ### copy task
 
 This task copies any files from the root "source" folder and copies it to the distribution folder.
@@ -122,6 +128,7 @@ Things like the favicon, robots, and crossdomain files will be copied in this ta
 ### images task
 
 This task compresses any images and then outputs them to the distribution folder.
+The images will only be compressed if the gulp process is started with the "--prod" argument like `gulp --prod`.
 
 ---
 

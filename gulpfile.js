@@ -10,7 +10,7 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     path = require('path'),
     sass = require('gulp-sass'),
-    minifyCss = require('gulp-minify-css'),
+    cssnano = require('gulp-cssnano'),
     merge = require('merge-stream'),
     argv = require('yargs').argv,
     gulpif = require('gulp-if'),
@@ -107,7 +107,7 @@ var fileNames = {
 gulp.task('css', ['clean'], function () {
     var main = gulp.src(srcPath + 'css/main.scss')
         .pipe(sass().on('error', sass.logError))
-        .pipe(minifyCss({ compatibility: 'ie8' }))
+        .pipe(gulpif(argv.prod, cssnano()))
         .pipe(revision())
         .pipe(gulp.dest(distPath + 'css/'))
         .pipe(inspect(function (file, t) {
@@ -186,7 +186,7 @@ gulp.task('sitemap', ['clean', 'templates'], function () {
 
 gulp.task('clean', function () {
     return gulp.src(distPath + '**/*.*', { read: false })
-        .pipe(clean());
+        .pipe(gulpif(argv.prod, clean()));
 });
 gulp.task('copy', ['clean'], function () {
     var root = gulp.src(srcPath + '*.*')
@@ -198,10 +198,10 @@ gulp.task('copy', ['clean'], function () {
 });
 gulp.task('images', ['clean'], function () {
     var compressed = gulp.src(srcPath + 'img/**/*.*')
-        .pipe(imagemin({
+        .pipe(gulpif(argv.prod, imagemin({
             progressive: true,
             svgoPlugins: [{ removeViewBox: false }],
-        }))
+        })))
         .pipe(gulp.dest(distPath + 'img/'));
 
     // any other image copying here
